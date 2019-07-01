@@ -1,0 +1,43 @@
+@import './assets/scss/base.scss';
+
+// fonts
+@font-face {
+  font-family: 'WorkSans-Light';
+  src: url('assets/fonts/WorkSans-Light.ttf');
+}
+
+@font-face {
+  font-family: 'WorkSans-Regular';
+  src: url('assets/fonts/WorkSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'WorkSans-Bold';
+  src: url('assets/fonts/WorkSans-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'Segoe UI';
+  src: url('assets/fonts/Segoe UI.woff');
+}
+
+@font-face {
+  font-family: 'Segoe UI-Bold';
+  src: url('assets/fonts/Segoe UI Bold.woff');
+}
+
+* {
+  box-sizing: border-box;
+  font-family: $sans-light;
+  color: $black-light;
+
+  &:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+body {
+  margin: 0 auto;
+  padding: 0;
+}

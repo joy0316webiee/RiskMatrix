@@ -1,0 +1,48 @@
+@import 'assets/scss/base.scss';
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  border-radius: 13px 13px 0 0;
+  background-color: #02abfc;
+  padding: 8px 100px 8px 35px;
+  position: relative;
+
+  &.editable {
+  }
+
+  .topbar-title {
+    label {
+      color: #ffffff;
+      font-family: Segoe UI;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.45px;
+    }
+  }
+  .topbar-content {
+    .not-decided {
+      display: flex;
+      align-items: center;
+
+      span {
+        color: #ffffff;
+        font-family: Segoe UI;
+        font-weight: 600;
+        margin-right: 10px;
+      }
+    }
+  }
+  .topbar-close {
+    position: absolute;
+    right: 23px;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}

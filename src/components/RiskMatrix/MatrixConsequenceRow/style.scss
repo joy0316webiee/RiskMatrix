@@ -1,0 +1,14 @@
+@import 'assets/scss/base.scss';
+
+.consequence {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .consequence-safety {
+    flex: 2;
+  }
+  .consequence-environment {
+    flex: 1;
+  }
+}

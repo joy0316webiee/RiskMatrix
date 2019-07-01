@@ -1,0 +1,63 @@
+@import 'assets/scss/base.scss';
+
+.matrix-container {
+  width: 1037px;
+  height: 630px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  border-radius: 13px;
+  background-color: #ffffff;
+  margin: 0 auto;
+
+  .content-wrapper {
+    padding: 22px 35px 0px;
+    display: flex;
+    align-items: flex-end;
+
+    .consequences {
+      width: 412px;
+
+      .consequences-title {
+        display: flex;
+        align-items: center;
+        padding-bottom: 11px;
+        border-bottom: 1px solid #818181;
+        padding-right: 9px;
+
+        span {
+          color: #b8b8b8;
+          font-family: Segoe UI;
+          font-weight: 400;
+          font-size: 11px;
+
+          &.consequences-title__safety {
+            flex: 2;
+          }
+          &.consequences-title__environment {
+            flex: 1;
+          }
+        }
+      }
+      .consequences-details {
+        padding-right: 9px;
+
+        .consequences-details__row {
+          border-bottom: 1px solid #d5d5d5;
+          height: 68px;
+          padding: 14px 0px;
+          display: flex;
+          align-items: center;
+        }
+      }
+      .consequences-add {
+      }
+    }
+    .likelihoods {
+      .likelihoods-column {
+        .likelihoods-column__content {
+        }
+        .likelihoods-column__delete {
+        }
+      }
+    }
+  }
+}
