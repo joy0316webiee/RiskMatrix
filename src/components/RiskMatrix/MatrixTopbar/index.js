@@ -3,8 +3,8 @@ import classNames from 'classnames';
 
 import MatrixCell from '../MatrixCell';
 
-import './style.scss';
 import imgCloseIcon from 'assets/images/ic_close.png';
+import './style.scss';
 
 class MatrixTopbar extends Component {
   state = {
@@ -19,8 +19,6 @@ class MatrixTopbar extends Component {
 
   render() {
     const { editable } = this.state;
-    // prettier-ignore
-    const { undecided: { rating, color } } = this.props;
 
     const topbarClass = classNames('topbar', { editable: editable });
 
@@ -33,7 +31,7 @@ class MatrixTopbar extends Component {
           {editable && <EditPanel />}
           <div className="not-decided">
             <span>Not decided</span>
-            <MatrixCell rating={rating} color={color} />
+            <MatrixCell rating={0} />
           </div>
         </div>
         <div className="topbar-close">

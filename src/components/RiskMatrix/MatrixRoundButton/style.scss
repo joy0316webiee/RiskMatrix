@@ -1,15 +1,43 @@
 @import 'assets/scss/base.scss';
 
-span {
-  &.add {
+.round-button {
+  width: 22px;
+  height: 22px;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
 
+  &.add {
+    background-color: #02abfc;
+    border: 1px solid #02abfc;
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 17px;
+    padding: 2px 0 5px;
+
+    &:hover {
+      background-color: #ffffff;
+      border: 1px solid #02abfc;
+      color: #02abfc;
+    }
+
+    &.small {
+      width: 15px;
+      height: 15px;
+      font-size: 15px;
+      line-height: 8px;
+    }
   }
   &.delete {
+    font-size: 35px;
+    line-height: 5px;
+    padding: 2px 0 5px;
+    border: 1px solid #02abfc;
+    color: #02abfc;
 
-  }
-  &.normal {
-  }
-  &.small {
-
+    &:hover {
+      background-color: #02abfc;
+      color: #ffffff;
+    }
   }
 }

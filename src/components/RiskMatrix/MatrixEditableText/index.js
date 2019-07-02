@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 
 import './style.scss';
 
@@ -8,6 +7,12 @@ class MatrixEditableText extends Component {
     text: this.props.text,
     editing: false
   };
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      this.setState({ ...this.props });
+    }
+  }
 
   render() {
     const { text, editing } = this.state;

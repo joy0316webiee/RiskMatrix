@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import MatrixTopbar from './MatrixTopbar';
 import MatrixFooter from './MatrixFooter';
 import MatrixConsequenceRow from './MatrixConsequenceRow';
@@ -6,23 +7,6 @@ import MatrixLikelihoodColumn from './MatrixLikelihoodColumn';
 import MatrixRoundButton from './MatrixRoundButton';
 
 import './style.scss';
-
-const matrixConfig = {
-  minNumber: 3,
-  maxNumber: 8,
-  defaultColors: [
-    { limit: 6, color: '#97ffb2' },
-    { limit: 11, color: '#c2dbff' },
-    { limit: 21, color: '#ffcb9e' },
-    { limit: 21, color: '#ffcb9e' },
-    { limit: 28, color: '#fbff7b' },
-    { limit: 36, color: '#9ed8ff' },
-    { limit: 43, color: '#b366be' },
-    { limit: 49, color: '#ffabb9' },
-    { limit: 58, color: '#ffc063' },
-    { limit: 64, color: '#ff3131' }
-  ]
-};
 
 const initialState = {
   liklihoods: [
@@ -43,7 +27,20 @@ const initialState = {
       description: 'Weekly, less 4/mo.'
     },
     {
-      title: 'Almost Certain'
+      title: 'Likely',
+      description: 'Weekly, less 4/mo.'
+    },
+    {
+      title: 'Likely',
+      description: 'Weekly, less 4/mo.'
+    },
+    {
+      title: 'Likely',
+      description: 'Weekly, less 4/mo.'
+    },
+    {
+      title: 'Almost Certain',
+      description: ''
     }
   ],
   consequences: [
@@ -82,10 +79,31 @@ const initialState = {
         description: 'Hazard where a peson can die'
       },
       environment: 'Catastrophe'
+    },
+    {
+      safety: {
+        title: 'Fatality',
+        description: 'Hazard where a peson can die'
+      },
+      environment: 'Catastrophe'
+    },
+    {
+      safety: {
+        title: 'Fatality',
+        description: 'Hazard where a peson can die'
+      },
+      environment: 'Catastrophe'
+    },
+    {
+      safety: {
+        title: 'Fatality',
+        description: 'Hazard where a peson can die'
+      },
+      environment: 'Catastrophe'
     }
   ],
+  addedConsequences: [],
   editable: false,
-  ratedCells: [],
   undecidedCell: {
     rating: 0,
     color: '#cfcfcf'
@@ -98,16 +116,15 @@ class RiskMatrix extends Component {
   render() {
     const {
       consequences,
+      addedConsequences,
       liklihoods,
-      editable,
-      ratedCells,
-      undecidedCell
+      editable
     } = this.state;
 
     return (
       <div className="matrix-container">
         <div className="topbar-wrapper">
-          <MatrixTopbar editable={editable} undecided={undecidedCell} />
+          <MatrixTopbar editable={editable} />
         </div>
         <div className="content-wrapper">
           <div className="consequences">
@@ -120,27 +137,50 @@ class RiskMatrix extends Component {
             <div className="consequences-details">
               {consequences &&
                 consequences.map((item, i) => (
-                  <div className="consequences-details__row">
-                    <MatrixConsequenceRow consequence={item} key={i} />
+                  <div className="consequences-details__row" key={i}>
+                    <MatrixConsequenceRow
+                      editable={editable}
+                      consequence={item}
+                      row={i}
+                    />
+                  </div>
+                ))}
+              {addedConsequences &&
+                addedConsequences.map((item, i) => (
+                  <div className="consequences-details__added" key={i}>
+                    <MatrixConsequenceRow editable={editable} newRow />
                   </div>
                 ))}
             </div>
-            <div className="consequences-add">
-              <MatrixConsequenceRow newRow />
-            </div>
+            {editable && (
+              <div className="consequences-addnew">
+                <MatrixRoundButton type={'add'} />
+              </div>
+            )}
           </div>
           <div className="likelihoods">
             {liklihoods &&
               liklihoods.map((item, i) => (
                 <div className="likelihoods-column" key={i}>
                   <div className="likelihoods-column__content">
-                    <MatrixLikelihoodColumn liklihood={item} />
+                    <MatrixLikelihoodColumn
+                      editable={editable}
+                      likelihood={item}
+                      col={i}
+                      nRows={consequences.length}
+                      nCols={liklihoods.length}
+                    />
                   </div>
                   <div className="likelihoods-column__delete">
                     {editable && <MatrixRoundButton type="delete" />}
                   </div>
                 </div>
               ))}
+            {editable && (
+              <div className="likelihoods-addnew">
+                <MatrixRoundButton type={'add'} />
+              </div>
+            )}
           </div>
         </div>
         <div className="footer-wrapper">

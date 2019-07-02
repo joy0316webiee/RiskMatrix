@@ -1,0 +1,21 @@
+@import 'assets/scss/base.scss';
+
+.likelihood {
+  .likelihood-header {
+    padding-bottom: 11px;
+    border-bottom: 1px solid #818181;
+    margin: 0 -2px;
+
+    .likelihood-header__description {
+      max-width: 57px;
+      margin: 0 auto;
+    }
+    .likelihood-header__title {
+      max-width: 90px;
+      margin: 0 auto;
+    }
+  }
+  .likelihood-cells {
+    margin-top: 4px;
+  }
+}
