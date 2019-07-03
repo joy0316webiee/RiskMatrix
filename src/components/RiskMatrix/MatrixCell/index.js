@@ -20,6 +20,12 @@ const defaultColors = [
 class MatrixCell extends Component {
   state = { rating: this.props.rating };
 
+  componentDidUpdate(prevProps) {
+    if (this.props.rating !== prevProps.rating) {
+      this.setState({ rating: this.props.rating });
+    }
+  }
+
   getRatedColor = rating => {
     const index = defaultColors.findIndex(item => item.limit > rating);
     return defaultColors[index].color;

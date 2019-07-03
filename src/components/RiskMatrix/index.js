@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 
 import MatrixTopbar from './MatrixTopbar';
 import MatrixFooter from './MatrixFooter';
@@ -21,18 +22,6 @@ const initialState = {
     {
       title: 'Occasionaly',
       description: 'Monthly'
-    },
-    {
-      title: 'Likely',
-      description: 'Weekly, less 4/mo.'
-    },
-    {
-      title: 'Likely',
-      description: 'Weekly, less 4/mo.'
-    },
-    {
-      title: 'Likely',
-      description: 'Weekly, less 4/mo.'
     },
     {
       title: 'Likely',
@@ -79,30 +68,10 @@ const initialState = {
         description: 'Hazard where a peson can die'
       },
       environment: 'Catastrophe'
-    },
-    {
-      safety: {
-        title: 'Fatality',
-        description: 'Hazard where a peson can die'
-      },
-      environment: 'Catastrophe'
-    },
-    {
-      safety: {
-        title: 'Fatality',
-        description: 'Hazard where a peson can die'
-      },
-      environment: 'Catastrophe'
-    },
-    {
-      safety: {
-        title: 'Fatality',
-        description: 'Hazard where a peson can die'
-      },
-      environment: 'Catastrophe'
     }
   ],
   addedConsequences: [],
+  addedLiklihoods: [],
   editable: false,
   undecidedCell: {
     rating: 0,
@@ -113,13 +82,33 @@ const initialState = {
 class RiskMatrix extends Component {
   state = { ...initialState };
 
+  toggleEditable = () =>
+    this.setState(prevState => ({ editable: !prevState.editable }));
+
+  handleCreateConsequence = () => {
+    const newConsequence = {
+      safety: {
+        title: 'New',
+        description: ''
+      },
+      environment: 'New'
+    };
+
+    this.setState(prevState => ({
+      consequences: prevState.consequences.concat(newConsequence)
+    }));
+  };
+
+  handleRemoveConsequence = row => {
+    this.setState(prevState => ({
+      consequences: prevState.consequences.filter(
+        (item, index) => index !== row
+      )
+    }));
+  };
+
   render() {
-    const {
-      consequences,
-      addedConsequences,
-      liklihoods,
-      editable
-    } = this.state;
+    const { consequences, liklihoods, editable } = this.state;
 
     return (
       <div className="matrix-container">
@@ -141,41 +130,41 @@ class RiskMatrix extends Component {
                     <MatrixConsequenceRow
                       editable={editable}
                       consequence={item}
+                      onRemove={this.handleRemoveConsequence}
                       row={i}
                     />
-                  </div>
-                ))}
-              {addedConsequences &&
-                addedConsequences.map((item, i) => (
-                  <div className="consequences-details__added" key={i}>
-                    <MatrixConsequenceRow editable={editable} newRow />
                   </div>
                 ))}
             </div>
             {editable && (
               <div className="consequences-addnew">
-                <MatrixRoundButton type={'add'} />
+                <MatrixRoundButton
+                  type={'add'}
+                  action={this.handleCreateConsequence}
+                />
               </div>
             )}
           </div>
-          <div className="likelihoods">
-            {liklihoods &&
-              liklihoods.map((item, i) => (
-                <div className="likelihoods-column" key={i}>
-                  <div className="likelihoods-column__content">
-                    <MatrixLikelihoodColumn
-                      editable={editable}
-                      likelihood={item}
-                      col={i}
-                      nRows={consequences.length}
-                      nCols={liklihoods.length}
-                    />
+          <div className={classNames('likelihoods', { editable: editable })}>
+            <div className="likelihoods-details">
+              {liklihoods &&
+                liklihoods.map((item, i) => (
+                  <div className="likelihoods-column" key={i}>
+                    <div className="likelihoods-column__content">
+                      <MatrixLikelihoodColumn
+                        editable={editable}
+                        likelihood={item}
+                        nRows={consequences.length}
+                        nCols={liklihoods.length}
+                        col={i}
+                      />
+                    </div>
+                    <div className="likelihoods-column__delete">
+                      {editable && <MatrixRoundButton type="delete" />}
+                    </div>
                   </div>
-                  <div className="likelihoods-column__delete">
-                    {editable && <MatrixRoundButton type="delete" />}
-                  </div>
-                </div>
-              ))}
+                ))}
+            </div>
             {editable && (
               <div className="likelihoods-addnew">
                 <MatrixRoundButton type={'add'} />
@@ -184,7 +173,10 @@ class RiskMatrix extends Component {
           </div>
         </div>
         <div className="footer-wrapper">
-          <MatrixFooter />
+          <MatrixFooter
+            editable={editable}
+            toggleEditable={this.toggleEditable}
+          />
         </div>
       </div>
     );

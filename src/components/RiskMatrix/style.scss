@@ -56,26 +56,39 @@
       }
     }
     .likelihoods {
-      display: flex;
-      align-items: flex-end;
+      position: relative;
 
-      .likelihoods-column {
+      &.editable {
+        margin-right: 20px;
+      }
+
+      .likelihoods-details {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        padding: 2px 2px 0 2px;
-        min-width: 62px;
-        max-width: 102px;
+        align-items: flex-end;
 
-        .likelihoods-column__content {
-          width: 100%;
-          text-align: center;
+        .likelihoods-column {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+          padding: 2px 2px 0 2px;
+          min-width: 62px;
+          max-width: 102px;
+
+          .likelihoods-column__content {
+            width: 100%;
+            text-align: center;
+          }
+          .likelihoods-column__delete {
+            position: absolute;
+            bottom: -30px;
+          }
         }
-        .likelihoods-column__delete {
-          position: absolute;
-          bottom: -30px;
-        }
+      }
+      .likelihoods-addnew {
+        position: absolute;
+        top: 32px;
+        right: -35px;
       }
     }
   }

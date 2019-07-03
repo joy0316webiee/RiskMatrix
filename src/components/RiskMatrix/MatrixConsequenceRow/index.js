@@ -6,6 +6,11 @@ import MatrixRoundButton from '../MatrixRoundButton';
 import './style.scss';
 
 class MatrixConsequenceRow extends Component {
+  handleRemoveSelf = () => {
+    const { row, onRemove } = this.props;
+    onRemove(row);
+  };
+
   render() {
     const { editable, consequence, newRow } = this.props;
 
@@ -13,7 +18,7 @@ class MatrixConsequenceRow extends Component {
       <Fragment>
         {editable && (
           <div className="consequence-action">
-            <MatrixRoundButton type={'delete'} />
+            <MatrixRoundButton type={'delete'} action={this.handleRemoveSelf} />
           </div>
         )}
         <div className="consequence-safety">
@@ -30,7 +35,7 @@ class MatrixConsequenceRow extends Component {
       <Fragment>
         {editable && (
           <div className="consequence-action">
-            <MatrixRoundButton type={'delete'} />
+            <MatrixRoundButton type={'delete'} action={this.handleRemoveSelf} />
           </div>
         )}
         <div className="consequence-safety">

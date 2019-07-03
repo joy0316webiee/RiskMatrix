@@ -1,0 +1,47 @@
+@import 'assets/scss/base.scss';
+
+.footer {
+  button {
+    width: 117px;
+    height: 36px;
+    border-radius: 64px;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Segoe UI;
+    cursor: pointer;
+
+    &.button-default {
+      border: 2px solid #02abfc;
+      background: white;
+      color: #02abfc;
+
+      &:hover {
+        border: 2px solid white;
+        background: #02abfc;
+        color: white;
+      }
+    }
+    &.button-primary {
+      border: 2px solid white;
+      background: #02abfc;
+      color: white;
+
+      &:hover {
+        border: 2px solid #02abfc;
+        background: white;
+        color: #02abfc;
+      }
+    }
+  }
+
+  .footer-editable {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px 35px 20px;
+  }
+  .footer-normal {
+    text-align: right;
+    padding: 20px 35px 20px;
+  }
+}

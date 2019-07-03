@@ -22,8 +22,12 @@ class MatrixLikelihoodColumn extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this.setState({ ...this.props });
+    if (this.props.editable !== prevProps.editable) {
+      this.setState({ editable: this.props.editable });
+    } else if (this.props !== prevProps) {
+      this.setState({ ...this.props }, () => {
+        this.initCells(this.state);
+      });
     }
   }
 

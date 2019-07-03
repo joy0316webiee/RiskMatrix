@@ -11,6 +11,7 @@
   position: relative;
 
   &.editable {
+    background-color: #2285b5;
   }
 
   .topbar-title {
@@ -23,6 +24,50 @@
     }
   }
   .topbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .edit-panel {
+      margin-right: 66px;
+      display: flex;
+      align-items: center;
+
+      .edit-panel__text,
+      .edit-panel__paint-toggle {
+        width: 52px;
+        height: 52px;
+        margin: 0 1px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(256, 256, 256, 0.1);
+        }
+        &.active {
+          background-color: rgba(256, 256, 256, 0.34);
+        }
+      }
+
+      .edit-panel__paint {
+        position: relative;
+
+        .edit-panel__paint-sketch {
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: white;
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+          border-radius: 13px;
+          padding: 10px;
+          z-index: 1;
+        }
+      }
+    }
+
     .not-decided {
       display: flex;
       align-items: center;

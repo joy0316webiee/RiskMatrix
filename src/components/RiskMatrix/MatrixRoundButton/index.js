@@ -6,8 +6,10 @@ import './style.scss';
 const MatrixRoundButton = ({ type, size, action }) => {
   const btnClass = classNames('round-button', type, size);
 
+  const handleClick = () => action && action();
+
   return (
-    <button onClick={action && action()} className={btnClass}>
+    <button onClick={handleClick} className={btnClass}>
       {type === 'add' ? '+' : '-'}
     </button>
   );
