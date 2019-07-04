@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import './style.scss';
 
 class MatrixFooter extends Component {
-  state = {
-    editable: this.props.editable
-  };
+  state = { editable: this.props.editable };
 
   componentDidUpdate(prevProps) {
     if (this.props.editable !== prevProps.editable) {

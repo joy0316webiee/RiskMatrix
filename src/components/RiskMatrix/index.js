@@ -70,13 +70,11 @@ const initialState = {
       environment: 'Catastrophe'
     }
   ],
-  addedConsequences: [],
-  addedLiklihoods: [],
-  editable: false,
   undecidedCell: {
     rating: 0,
     color: '#cfcfcf'
-  }
+  },
+  editable: false
 };
 
 class RiskMatrix extends Component {
@@ -99,10 +97,10 @@ class RiskMatrix extends Component {
     }));
   };
 
-  handleRemoveConsequence = row => {
+  handleRemoveConsequence = rowNumber => {
     this.setState(prevState => ({
       consequences: prevState.consequences.filter(
-        (item, index) => index !== row
+        (item, index) => index !== rowNumber
       )
     }));
   };
@@ -128,10 +126,10 @@ class RiskMatrix extends Component {
                 consequences.map((item, i) => (
                   <div className="consequences-details__row" key={i}>
                     <MatrixConsequenceRow
-                      editable={editable}
                       consequence={item}
+                      rowNumber={i}
+                      editable={editable}
                       onRemove={this.handleRemoveConsequence}
-                      row={i}
                     />
                   </div>
                 ))}
@@ -152,11 +150,11 @@ class RiskMatrix extends Component {
                   <div className="likelihoods-column" key={i}>
                     <div className="likelihoods-column__content">
                       <MatrixLikelihoodColumn
-                        editable={editable}
                         likelihood={item}
+                        colNumber={i}
                         nRows={consequences.length}
                         nCols={liklihoods.length}
-                        col={i}
+                        editable={editable}
                       />
                     </div>
                     <div className="likelihoods-column__delete">

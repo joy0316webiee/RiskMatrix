@@ -3,10 +3,7 @@ import React, { Component } from 'react';
 import './style.scss';
 
 class MatrixEditableText extends Component {
-  state = {
-    text: this.props.text,
-    editing: false
-  };
+  state = { ...this.props };
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
@@ -15,8 +12,7 @@ class MatrixEditableText extends Component {
   }
 
   render() {
-    const { text, editing } = this.state;
-    const { theme } = this.props;
+    const { text, editing, theme } = this.state;
 
     return (
       <div className="editable-text">

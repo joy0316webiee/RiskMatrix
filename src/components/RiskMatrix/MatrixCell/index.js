@@ -2,21 +2,10 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import MatrixEditableText from '../MatrixEditableText';
+import Config from '../Constants';
 
 import './style.scss';
 
-const defaultColors = [
-  { limit: 1, color: '#cfcfcf' },
-  { limit: 7, color: '#97ffb2' },
-  { limit: 12, color: '#c2dbff' },
-  { limit: 22, color: '#ffcb9e' },
-  { limit: 29, color: '#fbff7b' },
-  { limit: 37, color: '#9ed8ff' },
-  { limit: 44, color: '#b366be' },
-  { limit: 50, color: '#ffabb9' },
-  { limit: 59, color: '#ffc063' },
-  { limit: 65, color: '#ff3131' }
-];
 class MatrixCell extends Component {
   state = { rating: this.props.rating };
 
@@ -27,8 +16,8 @@ class MatrixCell extends Component {
   }
 
   getRatedColor = rating => {
-    const index = defaultColors.findIndex(item => item.limit > rating);
-    return defaultColors[index].color;
+    const index = Config.defaultColors.findIndex(item => item.limit > rating);
+    return Config.defaultColors[index].color;
   };
 
   render() {

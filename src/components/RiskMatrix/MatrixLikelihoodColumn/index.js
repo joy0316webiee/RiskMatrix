@@ -9,52 +9,44 @@ class MatrixLikelihoodColumn extends Component {
   state = {
     editable: false,
     likelihood: {},
-    col: 0,
+    colNumber: 0,
     nRows: 0,
     nCols: 0,
-    cells: []
+    cellItems: []
   };
 
   componentDidMount() {
     this.setState({ ...this.props }, () => {
-      this.initCells(this.state);
+      this.initCellItems(this.state);
     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps)  {
     if (this.props.editable !== prevProps.editable) {
       this.setState({ editable: this.props.editable });
     } else if (this.props !== prevProps) {
       this.setState({ ...this.props }, () => {
-        this.initCells(this.state);
+        this.initCellItems(this.state);
       });
     }
   }
 
-  initCells = ({ col, nRows, nCols }) => {
+  initCellItems = ({ colNumber: j, nRows, nCols }) => {
     let cells = [];
-
-    for (let row = 0; row < nRows; row++) {
-      let temp = ((row + col) * (row + col + 1)) / 2 + row + 1;
-
-      if (row + col >= nCols) {
-        // prettier-ignore
-        temp = temp - (row + col - nCols) * (row + col - nCols + 1) / 2 - (row + col - nCols + 1);
-      }
-      if (row + col >= nRows) {
-        temp = temp - ((row + col - nRows) * (row + col - nRows + 1)) / 2;
-      }
-
+    for (let i = 0; i < nRows; i++) {
+      let temp = ((i + j) * (i + j + 1)) / 2 + i + 1;
+      // prettier-ignore
+      if (i + j >= nCols) temp = temp - (i + j - nCols) * (i + j - nCols + 1) / 2 - (i + j - nCols + 1);
+      // prettier-ignore
+      if (i + j >= nRows) temp = temp - ((i + j - nRows) * (i + j - nRows + 1)) / 2;
       cells.push(temp);
     }
-    this.setState({ cells });
+    this.setState({ cellItems: cells });
   };
 
   render() {
-    const {
-      likelihood: { description, title },
-      cells
-    } = this.state;
+    // prettier-ignore
+    const { likelihood: { description, title }, cellItems } = this.state;
 
     return (
       <div className="likelihood">
@@ -67,8 +59,8 @@ class MatrixLikelihoodColumn extends Component {
           </div>
         </div>
         <div className="likelihood-cells">
-          {cells &&
-            cells.map((cell, i) => <MatrixCell rating={cell} key={i} />)}
+          {cellItems &&
+            cellItems.map((item, i) => <MatrixCell rating={item} key={i} />)}
         </div>
       </div>
     );
