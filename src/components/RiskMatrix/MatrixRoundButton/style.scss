@@ -7,7 +7,7 @@
   border-radius: 50%;
   cursor: pointer;
 
-  &.add {
+  &.create {
     background-color: #02abfc;
     border: 1px solid #02abfc;
     color: #ffffff;
@@ -39,5 +39,14 @@
       background-color: #02abfc;
       color: #ffffff;
     }
+  }
+  &.disabled {
+    background-color: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 17px;
+    padding: 2px 0 5px;
+    cursor: not-allowed;
   }
 }

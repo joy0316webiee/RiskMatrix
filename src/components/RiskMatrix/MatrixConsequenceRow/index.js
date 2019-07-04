@@ -3,22 +3,29 @@ import React, { Component } from 'react';
 import MatrixEditableText from '../MatrixEditableText';
 import MatrixRoundButton from '../MatrixRoundButton';
 
+import Config from '../Constants';
+
 import './style.scss';
 
 class MatrixConsequenceRow extends Component {
-  handleRemoveSelf = () => {
-    this.props.onRemove(this.props.rowNumber);
+  handleDeleteSelf = () => {
+    this.props.onDelete(this.props.rowNumber);
   };
 
   render() {
     // prettier-ignore
-    const { editable, consequence: {safety, environment} } = this.props;
+    const { editable, consequence: {safety, environment}, currentHeight } = this.props;
+    const { minLength } = Config;
 
     return (
       <div className="consequence">
         {editable && (
-          <div className="consequence-action">
-            <MatrixRoundButton type={'delete'} action={this.handleRemoveSelf} />
+          <div className="consequence-delete">
+            <MatrixRoundButton
+              method={'delete'}
+              disabled={currentHeight <= minLength}
+              action={this.handleDeleteSelf}
+            />
           </div>
         )}
         <div className="consequence-safety">

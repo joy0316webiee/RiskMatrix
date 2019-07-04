@@ -1,6 +1,6 @@
 export default {
-  minWidth: 3,
-  maxWidth: 8,
+  minLength: 3,
+  maxLength: 8,
   defaultColors: [
     { limit: 1, color: '#cfcfcf' },
     { limit: 7, color: '#97ffb2' },

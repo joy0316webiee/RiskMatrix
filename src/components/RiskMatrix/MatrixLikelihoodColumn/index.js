@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
 import MatrixEditableText from '../MatrixEditableText';
+import MatrixRoundButton from '../MatrixRoundButton';
 import MatrixCell from '../MatrixCell';
+
+import Config from '../Constants';
 
 import './style.scss';
 
@@ -9,10 +12,10 @@ class MatrixLikelihoodColumn extends Component {
   state = {
     editable: false,
     likelihood: {},
+    cellItems: [],
     colNumber: 0,
-    nRows: 0,
-    nCols: 0,
-    cellItems: []
+    currentWidth: 0,
+    currentHeight: 0
   };
 
   componentDidMount() {
@@ -21,7 +24,7 @@ class MatrixLikelihoodColumn extends Component {
     });
   }
 
-  componentDidUpdate(prevProps)  {
+  componentDidUpdate(prevProps) {
     if (this.props.editable !== prevProps.editable) {
       this.setState({ editable: this.props.editable });
     } else if (this.props !== prevProps) {
@@ -31,22 +34,27 @@ class MatrixLikelihoodColumn extends Component {
     }
   }
 
-  initCellItems = ({ colNumber: j, nRows, nCols }) => {
+  initCellItems = ({ colNumber: j, currentWidth, currentHeight }) => {
     let cells = [];
-    for (let i = 0; i < nRows; i++) {
+    for (let i = 0; i < currentHeight; i++) {
       let temp = ((i + j) * (i + j + 1)) / 2 + i + 1;
       // prettier-ignore
-      if (i + j >= nCols) temp = temp - (i + j - nCols) * (i + j - nCols + 1) / 2 - (i + j - nCols + 1);
+      if (i + j >= currentWidth) temp = temp - (i + j - currentWidth) * (i + j - currentWidth + 1) / 2 - (i + j - currentWidth + 1);
       // prettier-ignore
-      if (i + j >= nRows) temp = temp - ((i + j - nRows) * (i + j - nRows + 1)) / 2;
+      if (i + j >= currentHeight) temp = temp - ((i + j - currentHeight) * (i + j - currentHeight + 1)) / 2;
       cells.push(temp);
     }
     this.setState({ cellItems: cells });
   };
 
+  handleDeleteSelf = () => {
+    this.props.onDelete(this.state.colNumber);
+  };
+
   render() {
     // prettier-ignore
-    const { likelihood: { description, title }, cellItems } = this.state;
+    const { likelihood: { description, title }, cellItems, currentWidth, editable } = this.state;
+    const { minLength } = Config;
 
     return (
       <div className="likelihood">
@@ -62,6 +70,15 @@ class MatrixLikelihoodColumn extends Component {
           {cellItems &&
             cellItems.map((item, i) => <MatrixCell rating={item} key={i} />)}
         </div>
+        {editable && (
+          <div className="likelihood-delete">
+            <MatrixRoundButton
+              method={'delete'}
+              disabled={currentWidth <= minLength}
+              action={this.handleDeleteSelf}
+            />
+          </div>
+        )}
       </div>
     );
   }

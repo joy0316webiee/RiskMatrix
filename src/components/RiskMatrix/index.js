@@ -6,6 +6,7 @@ import MatrixFooter from './MatrixFooter';
 import MatrixConsequenceRow from './MatrixConsequenceRow';
 import MatrixLikelihoodColumn from './MatrixLikelihoodColumn';
 import MatrixRoundButton from './MatrixRoundButton';
+import Config from './Constants';
 
 import './style.scss';
 
@@ -74,7 +75,7 @@ const initialState = {
     rating: 0,
     color: '#cfcfcf'
   },
-  editable: false
+  editable: true
 };
 
 class RiskMatrix extends Component {
@@ -97,7 +98,7 @@ class RiskMatrix extends Component {
     }));
   };
 
-  handleRemoveConsequence = rowNumber => {
+  handleDeleteConsequence = rowNumber => {
     this.setState(prevState => ({
       consequences: prevState.consequences.filter(
         (item, index) => index !== rowNumber
@@ -105,8 +106,32 @@ class RiskMatrix extends Component {
     }));
   };
 
+  handleCreateLiklihood = () => {
+    const newLiklihood = {
+      title: 'New',
+      description: ''
+    };
+
+    this.setState(prevState => ({
+      liklihoods: prevState.liklihoods.concat(newLiklihood)
+    }));
+  };
+
+  handleDeleteLiklihood = colNumber => {
+    this.setState(prevState => ({
+      liklihoods: prevState.liklihoods.filter(
+        (item, index) => index !== colNumber
+      )
+    }));
+  };
+
   render() {
     const { consequences, liklihoods, editable } = this.state;
+
+    const currentWidth = liklihoods.length;
+    const currentHeight = consequences.length;
+
+    const { maxLength } = Config;
 
     return (
       <div className="matrix-container">
@@ -127,9 +152,10 @@ class RiskMatrix extends Component {
                   <div className="consequences-details__row" key={i}>
                     <MatrixConsequenceRow
                       consequence={item}
+                      currentHeight={currentHeight}
                       rowNumber={i}
                       editable={editable}
-                      onRemove={this.handleRemoveConsequence}
+                      onDelete={this.handleDeleteConsequence}
                     />
                   </div>
                 ))}
@@ -137,7 +163,8 @@ class RiskMatrix extends Component {
             {editable && (
               <div className="consequences-addnew">
                 <MatrixRoundButton
-                  type={'add'}
+                  method={'create'}
+                  disabled={currentHeight >= maxLength}
                   action={this.handleCreateConsequence}
                 />
               </div>
@@ -151,21 +178,23 @@ class RiskMatrix extends Component {
                     <div className="likelihoods-column__content">
                       <MatrixLikelihoodColumn
                         likelihood={item}
+                        currentWidth={currentWidth}
+                        currentHeight={currentHeight}
                         colNumber={i}
-                        nRows={consequences.length}
-                        nCols={liklihoods.length}
                         editable={editable}
+                        onDelete={this.handleDeleteLiklihood}
                       />
-                    </div>
-                    <div className="likelihoods-column__delete">
-                      {editable && <MatrixRoundButton type="delete" />}
                     </div>
                   </div>
                 ))}
             </div>
             {editable && (
               <div className="likelihoods-addnew">
-                <MatrixRoundButton type={'add'} />
+                <MatrixRoundButton
+                  method={'create'}
+                  disabled={currentWidth >= maxLength}
+                  action={this.handleCreateLiklihood}
+                />
               </div>
             )}
           </div>

@@ -56,8 +56,6 @@
       }
     }
     .likelihoods {
-      position: relative;
-
       &.editable {
         margin-right: 20px;
       }
@@ -78,10 +76,6 @@
           .likelihoods-column__content {
             width: 100%;
             text-align: center;
-          }
-          .likelihoods-column__delete {
-            position: absolute;
-            bottom: -30px;
           }
         }
       }

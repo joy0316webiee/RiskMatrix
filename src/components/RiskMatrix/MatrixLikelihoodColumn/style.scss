@@ -1,6 +1,8 @@
 @import 'assets/scss/base.scss';
 
 .likelihood {
+  position: relative;
+
   .likelihood-header {
     padding-bottom: 11px;
     border-bottom: 1px solid #818181;
@@ -17,5 +19,11 @@
   }
   .likelihood-cells {
     margin-top: 4px;
+  }
+  .likelihood-delete {
+    position: absolute;
+    left: 50%;
+    bottom: -40px;
+    transform: translate(-50%, 0);
   }
 }
