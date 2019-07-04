@@ -4,24 +4,27 @@ import MatrixEditableText from '../MatrixEditableText';
 import MatrixRoundButton from '../MatrixRoundButton';
 import MatrixCell from '../MatrixCell';
 
-import Config from '../Constants';
+import constants from '../Constants';
 
 import './style.scss';
 
 class MatrixLikelihoodColumn extends Component {
   state = {
-    editable: false,
-    likelihood: {},
+    likelihood: null,
     cellItems: [],
     colNumber: 0,
+    colWidth: 0,
     currentWidth: 0,
-    currentHeight: 0
+    currentHeight: 0,
+    editable: false
   };
 
   componentDidMount() {
     this.setState({ ...this.props }, () => {
       this.initCellItems(this.state);
     });
+
+    this.wrapperRef = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
@@ -30,6 +33,10 @@ class MatrixLikelihoodColumn extends Component {
     } else if (this.props !== prevProps) {
       this.setState({ ...this.props }, () => {
         this.initCellItems(this.state);
+      });
+    } else if (this.wrapperRef.current.clientWidth !== this.state.colWidth) {
+      this.setState({
+        colWidth: this.wrapperRef.current.clientWidth
       });
     }
   }
@@ -44,6 +51,7 @@ class MatrixLikelihoodColumn extends Component {
       if (i + j >= currentHeight) temp = temp - ((i + j - currentHeight) * (i + j - currentHeight + 1)) / 2;
       cells.push(temp);
     }
+
     this.setState({ cellItems: cells });
   };
 
@@ -53,22 +61,43 @@ class MatrixLikelihoodColumn extends Component {
 
   render() {
     // prettier-ignore
-    const { likelihood: { description, title }, cellItems, currentWidth, editable } = this.state;
-    const { minLength } = Config;
+    const { likelihood, cellItems, currentWidth, editable, colWidth } = this.state;
+    const { minLength } = constants;
+    const editorWidth = colWidth + 5;
+
+    const displayHeader = ({ title, description }) => (
+      <div className="likelihood-header">
+        <div className="likelihood-header__description">
+          <MatrixEditableText
+            text={description}
+            textStyle={'grey-sm'}
+            maxLength={15}
+            alignCenter
+            editorWidth={editorWidth}
+            editable={editable}
+          />
+        </div>
+        <div className="likelihood-header__title">
+          <MatrixEditableText
+            text={title}
+            textStyle={'black-md'}
+            maxLength={15}
+            alignCenter
+            editorWidth={editorWidth}
+            editable={editable}
+          />
+        </div>
+      </div>
+    );
 
     return (
-      <div className="likelihood">
-        <div className="likelihood-header">
-          <div className="likelihood-header__description">
-            <MatrixEditableText text={description} theme={'grey-sm'} />
-          </div>
-          <div className="likelihood-header__title">
-            <MatrixEditableText text={title} theme={'black-md'} />
-          </div>
-        </div>
+      <div className="likelihood" ref={this.wrapperRef}>
+        {likelihood && displayHeader(likelihood)}
         <div className="likelihood-cells">
           {cellItems &&
-            cellItems.map((item, i) => <MatrixCell rating={item} key={i} />)}
+            cellItems.map((item, i) => (
+              <MatrixCell rating={item} key={i} editable={editable} />
+            ))}
         </div>
         {editable && (
           <div className="likelihood-delete">

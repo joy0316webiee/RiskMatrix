@@ -2,34 +2,56 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import MatrixEditableText from '../MatrixEditableText';
-import Config from '../Constants';
+import constants from '../Constants';
 
 import './style.scss';
 
 class MatrixCell extends Component {
-  state = { rating: this.props.rating };
+  state = {
+    rating: 0,
+    editable: false
+  };
+
+  componentDidMount() {
+    this.setState({
+      ...this.props
+    });
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.rating !== prevProps.rating) {
-      this.setState({ rating: this.props.rating });
+    if (this.props !== prevProps) {
+      this.setState({ ...this.props });
     }
   }
 
   getRatedColor = rating => {
-    const index = Config.defaultColors.findIndex(item => item.limit > rating);
-    return Config.defaultColors[index].color;
+    const index = constants.defaultColors.findIndex(
+      item => item.limit > rating
+    );
+    return constants.defaultColors[index].color;
   };
 
   render() {
-    const { rating } = this.state;
-    const cellClass = classNames('cell', { undefined: rating === 0 });
+    const { rating, editable } = this.state;
+    const cellClass = classNames(
+      'cell',
+      { editable: editable },
+      { undefined: rating === 0 }
+    );
 
     return (
       <div
         className={cellClass}
         style={{ backgroundColor: this.getRatedColor(rating) }}
       >
-        <MatrixEditableText text={rating} />
+        <MatrixEditableText
+          text={rating}
+          textStyle={'grey-primary-md'}
+          maxLength={2}
+          alignCenter
+          editorWidth={20}
+          editable={editable}
+        />
       </div>
     );
   }

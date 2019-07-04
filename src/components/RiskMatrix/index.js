@@ -6,7 +6,7 @@ import MatrixFooter from './MatrixFooter';
 import MatrixConsequenceRow from './MatrixConsequenceRow';
 import MatrixLikelihoodColumn from './MatrixLikelihoodColumn';
 import MatrixRoundButton from './MatrixRoundButton';
-import Config from './Constants';
+import constants from './Constants';
 
 import './style.scss';
 
@@ -77,7 +77,6 @@ const initialState = {
   },
   editable: true
 };
-
 class RiskMatrix extends Component {
   state = { ...initialState };
 
@@ -131,7 +130,7 @@ class RiskMatrix extends Component {
     const currentWidth = liklihoods.length;
     const currentHeight = consequences.length;
 
-    const { maxLength } = Config;
+    const { maxLength } = constants;
 
     return (
       <div className="matrix-container">

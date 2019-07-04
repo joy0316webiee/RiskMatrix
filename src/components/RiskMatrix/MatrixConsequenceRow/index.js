@@ -1,21 +1,65 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import MatrixEditableText from '../MatrixEditableText';
 import MatrixRoundButton from '../MatrixRoundButton';
 
-import Config from '../Constants';
+import constants from '../Constants';
 
 import './style.scss';
 
 class MatrixConsequenceRow extends Component {
+  state = {
+    consequence: null,
+    rowNumber: 0,
+    currentHeight: 0,
+    editable: false
+  };
+
+  componentDidMount() {
+    this.setState({ ...this.props });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      this.setState({ ...this.props });
+    }
+  }
+
   handleDeleteSelf = () => {
-    this.props.onDelete(this.props.rowNumber);
+    this.props.onDelete(this.state.rowNumber);
   };
 
   render() {
     // prettier-ignore
-    const { editable, consequence: {safety, environment}, currentHeight } = this.props;
-    const { minLength } = Config;
+    const { consequence, currentHeight, editable } = this.state;
+    const { minLength } = constants;
+
+    const displayDetails = ({ safety, environment }) => (
+      <Fragment>
+        <div className="consequence-safety">
+          <MatrixEditableText
+            text={safety.title}
+            textStyle={'grey-md'}
+            maxLength={30}
+            editable={editable}
+          />
+          <MatrixEditableText
+            text={safety.description}
+            textStyle={'grey-sm word-break'}
+            maxLength={100}
+            editable={editable}
+          />
+        </div>
+        <div className="consequence-environment">
+          <MatrixEditableText
+            text={environment}
+            textStyle={'black-md'}
+            maxLength={18}
+            editable={editable}
+          />
+        </div>
+      </Fragment>
+    );
 
     return (
       <div className="consequence">
@@ -28,13 +72,7 @@ class MatrixConsequenceRow extends Component {
             />
           </div>
         )}
-        <div className="consequence-safety">
-          <MatrixEditableText text={safety.title} theme={'grey-md'} />
-          <MatrixEditableText text={safety.description} theme={'grey-sm'} />
-        </div>
-        <div className="consequence-environment">
-          <MatrixEditableText text={environment} theme={'black-md'} />
-        </div>
+        {consequence && displayDetails(consequence)}
       </div>
     );
   }

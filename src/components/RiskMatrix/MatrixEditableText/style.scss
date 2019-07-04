@@ -1,11 +1,23 @@
 @import 'assets/scss/base.scss';
 
 .editable-text {
-  input,
+  padding-right: 2px;
+  position: relative;
+
+  &.align-center {
+    padding: 0;
+
+    .editable-text__editor {
+      margin: 0 auto;
+    }
+  }
+
+  textarea,
   span {
     display: inline-block;
     font-family: Segoe UI;
     font-weight: 600;
+    text-overflow: ellipsis;
 
     &.grey-md {
       color: #787878;
@@ -26,5 +38,42 @@
       color: #000000;
       font-size: 15px;
     }
+    &.word-break {
+      word-break: break-all;
+    }
+  }
+  textarea {
+    width: 100%;
+    resize: none;
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    color: #000000 !important;
+
+    &::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  }
+
+  .editable-text__editor {
+    position: relative;
+    display: flex;
+    align-self: center;
+
+    &::before {
+      content: '';
+      width: 2px;
+      height: 100%;
+      background: #eb8585;
+      display: block;
+      position: absolute;
+      left: -3px;
+    }
+  }
+  .editable-text__content {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

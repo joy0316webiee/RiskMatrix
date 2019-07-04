@@ -9,6 +9,9 @@
   text-align: center;
   cursor: pointer;
 
+  &.editable {
+    cursor: text;
+  }
   &.undefined {
     width: 45px;
     height: 36px;
