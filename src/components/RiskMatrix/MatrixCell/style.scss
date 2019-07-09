@@ -9,8 +9,15 @@
   text-align: center;
   cursor: pointer;
 
-  &.editable {
+  &:hover {
+    outline: 2px solid #02abfc;
+  }
+
+  &.text-edit {
     cursor: text;
+  }
+  &.color-edit {
+    cursor: grab;
   }
   &.undefined {
     width: 45px;
@@ -18,10 +25,11 @@
     padding: 6px 0px;
     border-radius: 3px;
     border: 2px solid #ffffff;
-    background-color: #cfcfcf;
   }
-
-  &:hover {
+  &.selected {
     outline: 2px solid #02abfc;
+  }
+  &.error {
+    outline: 2px solid #eb8585;
   }
 }

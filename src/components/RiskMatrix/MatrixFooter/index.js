@@ -13,16 +13,18 @@ class MatrixFooter extends Component {
 
   render() {
     const { editable } = this.state;
-    const { toggleEditable } = this.props;
+    const { onSave, onCancel, toggleEditable } = this.props;
 
     return (
       <div className="footer">
         {editable ? (
           <div className="footer-editable">
-            <button className="button-default" onClick={toggleEditable}>
+            <button className="button-default" onClick={onCancel}>
               Cancel
             </button>
-            <button className="button-primary">Save</button>
+            <button className="button-primary" onClick={onSave}>
+              Save
+            </button>
           </div>
         ) : (
           <div className="footer-normal">

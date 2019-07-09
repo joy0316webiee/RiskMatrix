@@ -14,23 +14,28 @@ const initialState = {
   liklihoods: [
     {
       title: 'Rare',
-      description: ''
+      description: '',
+      cellItems: []
     },
     {
       title: 'Unlikely',
-      description: 'Annually'
+      description: 'Annually',
+      cellItems: []
     },
     {
       title: 'Occasionaly',
-      description: 'Monthly'
+      description: 'Monthly',
+      cellItems: []
     },
     {
       title: 'Likely',
-      description: 'Weekly, less 4/mo.'
+      description: 'Weekly, less 4/mo.',
+      cellItems: []
     },
     {
       title: 'Almost Certain',
-      description: ''
+      description: '',
+      cellItems: []
     }
   ],
   consequences: [
@@ -71,35 +76,52 @@ const initialState = {
       environment: 'Catastrophe'
     }
   ],
+  editableLiklihoods: [],
+  editableConsequences: [],
   undecidedCell: {
     rating: 0,
     color: '#cfcfcf'
   },
-  editable: true
+  currentCell: null,
+  editType: 'text',
+  editable: false
 };
 class RiskMatrix extends Component {
   state = { ...initialState };
 
-  toggleEditable = () =>
-    this.setState(prevState => ({ editable: !prevState.editable }));
+  componentDidMount() {
+    this.setState(prevState => ({
+      editableLiklihoods: prevState.liklihoods,
+      editableConsequences: prevState.consequences
+    }));
+  }
+
+  toggleEditable = () => {
+    this.setState(prevState => ({
+      editable: !prevState.editable,
+      editableLiklihoods: prevState.liklihoods,
+      editableConsequences: prevState.consequences
+    }));
+  };
 
   handleCreateConsequence = () => {
     const newConsequence = {
       safety: {
         title: 'New',
-        description: ''
+        description: 'New description'
       },
       environment: 'New'
     };
 
     this.setState(prevState => ({
-      consequences: prevState.consequences.concat(newConsequence)
+      // prettier-ignore
+      editableConsequences: prevState.editableConsequences.concat(newConsequence)
     }));
   };
 
   handleDeleteConsequence = rowNumber => {
     this.setState(prevState => ({
-      consequences: prevState.consequences.filter(
+      editableConsequences: prevState.editableConsequences.filter(
         (item, index) => index !== rowNumber
       )
     }));
@@ -108,34 +130,90 @@ class RiskMatrix extends Component {
   handleCreateLiklihood = () => {
     const newLiklihood = {
       title: 'New',
-      description: ''
+      description: 'New Description'
     };
 
     this.setState(prevState => ({
-      liklihoods: prevState.liklihoods.concat(newLiklihood)
+      editableLiklihoods: prevState.editableLiklihoods.concat(newLiklihood)
     }));
   };
 
   handleDeleteLiklihood = colNumber => {
     this.setState(prevState => ({
-      liklihoods: prevState.liklihoods.filter(
+      editableLiklihoods: prevState.editableLiklihoods.filter(
         (item, index) => index !== colNumber
       )
     }));
   };
 
-  render() {
-    const { consequences, liklihoods, editable } = this.state;
+  handleUpdateLiklihood = (colNumber, likelihood) => {
+    const { liklihoods } = this.state;
+    liklihoods[colNumber] = likelihood;
+    this.setState({ liklihoods });
+  };
 
-    const currentWidth = liklihoods.length;
-    const currentHeight = consequences.length;
+  handleChangeEditType = editType => this.setState({ editType });
+
+  handleChangeColor = color => {
+    // prettier-ignore
+    const { liklihoods, undecidedCell, currentCell: { rowNumber, colNumber } } = this.state;
+    if (colNumber === -1 && rowNumber === -1) {
+      undecidedCell.color = color;
+      this.setState({ undecidedCell });
+    } else {
+      liklihoods[colNumber].cellItems[rowNumber].color = color;
+      this.setState({ liklihoods });
+    }
+  };
+
+  handleSelectCell = currentCell => {
+    this.setState({ currentCell });
+  };
+
+  handleCancel = () => {
+    this.setState(
+      prevState => ({
+        editableLiklihoods: prevState.liklihoods,
+        editableConsequences: prevState.consequences
+      }),
+      () => {
+        this.toggleEditable();
+      }
+    );
+  };
+
+  handleSave = () => {
+    this.setState(
+      prevState => ({
+        liklihoods: prevState.editableLiklihoods,
+        consequences: prevState.editableConsequences
+      }),
+      () => {
+        this.toggleEditable();
+      }
+    );
+  };
+
+  render() {
+    // prettier-ignore
+    const { editableConsequences, editableLiklihoods, currentCell, undecidedCell, editable, editType } = this.state;
+
+    const currentWidth = editableLiklihoods.length;
+    const currentHeight = editableConsequences.length;
 
     const { maxLength } = constants;
 
     return (
       <div className="matrix-container">
         <div className="topbar-wrapper">
-          <MatrixTopbar editable={editable} />
+          <MatrixTopbar
+            editable={editable}
+            currentCell={currentCell}
+            undecidedCell={undecidedCell}
+            onChangeEditType={this.handleChangeEditType}
+            onChangeColor={this.handleChangeColor}
+            onSelectCell={this.handleSelectCell}
+          />
         </div>
         <div className="content-wrapper">
           <div className="consequences">
@@ -146,14 +224,15 @@ class RiskMatrix extends Component {
               </span>
             </div>
             <div className="consequences-details">
-              {consequences &&
-                consequences.map((item, i) => (
+              {editableConsequences &&
+                editableConsequences.map((item, i) => (
                   <div className="consequences-details__row" key={i}>
                     <MatrixConsequenceRow
                       consequence={item}
                       currentHeight={currentHeight}
                       rowNumber={i}
                       editable={editable}
+                      editType={editType}
                       onDelete={this.handleDeleteConsequence}
                     />
                   </div>
@@ -171,16 +250,20 @@ class RiskMatrix extends Component {
           </div>
           <div className={classNames('likelihoods', { editable: editable })}>
             <div className="likelihoods-details">
-              {liklihoods &&
-                liklihoods.map((item, i) => (
+              {editableLiklihoods &&
+                editableLiklihoods.map((item, i) => (
                   <div className="likelihoods-column" key={i}>
                     <div className="likelihoods-column__content">
                       <MatrixLikelihoodColumn
                         likelihood={item}
+                        currentCell={currentCell}
                         currentWidth={currentWidth}
                         currentHeight={currentHeight}
                         colNumber={i}
                         editable={editable}
+                        editType={editType}
+                        onSelectCell={this.handleSelectCell}
+                        onUpdate={this.handleUpdateLiklihood}
                         onDelete={this.handleDeleteLiklihood}
                       />
                     </div>
@@ -202,6 +285,8 @@ class RiskMatrix extends Component {
           <MatrixFooter
             editable={editable}
             toggleEditable={this.toggleEditable}
+            onCancel={this.handleCancel}
+            onSave={this.handleSave}
           />
         </div>
       </div>

@@ -12,7 +12,8 @@ class MatrixConsequenceRow extends Component {
     consequence: null,
     rowNumber: 0,
     currentHeight: 0,
-    editable: false
+    editable: false,
+    editType: "text"
   };
 
   componentDidMount() {
@@ -31,7 +32,7 @@ class MatrixConsequenceRow extends Component {
 
   render() {
     // prettier-ignore
-    const { consequence, currentHeight, editable } = this.state;
+    const { consequence, currentHeight, editable, editType } = this.state;
     const { minLength } = constants;
 
     const displayDetails = ({ safety, environment }) => (
@@ -41,13 +42,13 @@ class MatrixConsequenceRow extends Component {
             text={safety.title}
             textStyle={'grey-md'}
             maxLength={30}
-            editable={editable}
+            editable={editable && editType === 'text'}
           />
           <MatrixEditableText
             text={safety.description}
             textStyle={'grey-sm word-break'}
             maxLength={100}
-            editable={editable}
+            editable={editable && editType === 'text'}
           />
         </div>
         <div className="consequence-environment">
@@ -55,7 +56,7 @@ class MatrixConsequenceRow extends Component {
             text={environment}
             textStyle={'black-md'}
             maxLength={18}
-            editable={editable}
+            editable={editable && editType === 'text'}
           />
         </div>
       </Fragment>

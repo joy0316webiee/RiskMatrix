@@ -16,6 +16,8 @@ class MatrixTopbar extends Component {
     editable: this.props.editable,
     currentMenu: MENU_EDIT,
     openedSketch: false,
+    currentCell: this.props.currentCell,
+    undecidedCell: this.props.undecidedCell,
     pickedColor: '#fff'
   };
 
@@ -28,8 +30,8 @@ class MatrixTopbar extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.editable !== prevProps.editable) {
-      this.setState({ editable: this.props.editable });
+    if (this.props !== prevProps) {
+      this.setState({ ...this.props });
     }
   }
 
@@ -43,19 +45,30 @@ class MatrixTopbar extends Component {
     }
   };
 
-  handleClickEditText = () => this.setState({ currentMenu: MENU_EDIT });
+  handleClickEditText = () =>
+    this.setState({ currentMenu: MENU_EDIT }, () => {
+      this.props.onChangeEditType('text');
+    });
 
   handleClickPaintColor = () =>
-    this.setState(prevState => ({
-      currentMenu: MENU_PAINT,
-      openedSketch: !prevState.openedSketch
-    }));
+    this.setState(
+      prevState => ({
+        currentMenu: MENU_PAINT,
+        openedSketch: !prevState.openedSketch
+      }),
+      () => {
+        this.props.onChangeEditType('color');
+      }
+    );
 
   handleChangeColor = color =>
-    this.setState({ pickedColor: color.hex, openedSketch: false });
+    this.setState({ pickedColor: color.hex, openedSketch: false }, () =>
+      this.props.onChangeColor(color.hex)
+    );
 
   render() {
-    const { editable, currentMenu, openedSketch, pickedColor } = this.state;
+    // prettier-ignore
+    const { editable, currentMenu, openedSketch, currentCell, pickedColor, undecidedCell: {rating, color} } = this.state;
     const topbarClass = classNames('topbar', { editable: editable });
 
     const displayEditPanel = () => (
@@ -77,7 +90,7 @@ class MatrixTopbar extends Component {
           >
             <img src={imgPaintIcon} alt="paint" />
           </div>
-          {openedSketch && (
+          {openedSketch && currentCell && (
             <div className="edit-panel__paint-sketch">
               <CirclePicker
                 color={pickedColor}
@@ -98,7 +111,14 @@ class MatrixTopbar extends Component {
           {editable && displayEditPanel()}
           <div className="not-decided">
             <span>Not decided</span>
-            <MatrixCell rating={0} />
+            <MatrixCell
+              rating={rating}
+              color={color}
+              rowNumber={-1}
+              colNumber={-1}
+              currentCell={currentCell}
+              onSelectCell={this.props.onSelectCell}
+            />
           </div>
         </div>
         <div className="topbar-close">

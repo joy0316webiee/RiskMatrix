@@ -26,8 +26,14 @@ class MatrixEditableText extends Component {
   };
 
   handleOutside = event => {
+    const { onUpdate } = this.props;
+    const { name, text } = this.state;
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      this.setState({ editing: false });
+      if (this.state.editing) {
+        this.setState({ editing: false }, () => {
+          onUpdate && onUpdate(name, text);
+        });
+      }
     }
   };
 
