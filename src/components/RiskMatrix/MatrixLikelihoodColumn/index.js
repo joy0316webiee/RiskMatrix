@@ -36,6 +36,7 @@ class MatrixLikelihoodColumn extends Component {
     ) {
       this.setState({ ...this.props }, () => {
         this.initCellItems(this.state);
+        console.log('here');
       });
     } else if (this.props !== prevProps) {
       this.setState({ ...this.props });
@@ -59,7 +60,6 @@ class MatrixLikelihoodColumn extends Component {
 
     const { colNumber, likelihood } = this.state;
     const updatedLikelihood = { ...likelihood, cellItems: cells };
-    console.log('COLUMN:', updatedLikelihood);
     this.props.onUpdate(colNumber, updatedLikelihood);
   };
 

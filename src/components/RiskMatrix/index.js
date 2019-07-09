@@ -147,9 +147,9 @@ class RiskMatrix extends Component {
   };
 
   handleUpdateLiklihood = (colNumber, likelihood) => {
-    const { liklihoods } = this.state;
-    liklihoods[colNumber] = likelihood;
-    this.setState({ liklihoods });
+    const { editableLiklihoods } = this.state;
+    editableLiklihoods[colNumber] = likelihood;
+    this.setState({ editableLiklihoods });
   };
 
   handleChangeEditType = editType => this.setState({ editType });
